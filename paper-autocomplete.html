@@ -567,6 +567,13 @@
        * On text event handler
        */
       _textObserver: function (text) {
+        var option = {
+          text: this.text,
+          value: this.value
+        };      
+
+        this._fireEvent(option, 'text-changed');
+
         if (text && text.trim()) {
           this._showClearButton();
         } else {
