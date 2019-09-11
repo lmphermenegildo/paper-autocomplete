@@ -7,6 +7,7 @@
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-ripple/paper-ripple.html">
 <link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
 
 <!--
   `paper-autocomplete`
@@ -136,6 +137,14 @@
         }
       }
 
+      paper-progress.blue {
+        --paper-progress-active-color: var(--dash-sub-header-background-color);
+      }
+      paper-progress {
+        width: 100%;
+        --paper-progress-height: 3px;
+      }
+
       .input-wrapper {
         @apply --layout-horizontal;
       }
@@ -224,6 +233,9 @@
       <slot id="templates" name="autocomplete-custom-template"></slot>
 
     </paper-autocomplete-suggestions>
+  </template>
+  <template is="dom-if" if="[[displayProgressBar]]">
+    <paper-progress indeterminate class="blue"></paper-progress>
   </template>
 </dom-module>
 <script>
@@ -491,7 +503,11 @@
         selectedOption: {
           type: Object,
           notify: true
-        }
+        },
+        /**
+         * Variable that controls the show of the progress bar
+         */
+        displayProgressBar: Boolean
       },
 
       observers: [
