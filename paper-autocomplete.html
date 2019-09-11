@@ -126,6 +126,10 @@
 
         --paper-input-container-focus-color: var(--primary-color);
 
+        --paper-input-container: {
+          padding-bottom: 0px;
+        }
+
         --paper-icon-button: {
           height: 24px;
           width: 24px;
@@ -140,9 +144,14 @@
       paper-progress.blue {
         --paper-progress-active-color: var(--dash-sub-header-background-color);
       }
+
       paper-progress {
         width: 100%;
         --paper-progress-height: 3px;
+      }
+
+      .progress-bar-container {
+        padding-bottom: 16px;
       }
 
       .input-wrapper {
@@ -233,9 +242,11 @@
       <slot id="templates" name="autocomplete-custom-template"></slot>
 
     </paper-autocomplete-suggestions>
-    <template is="dom-if" if="[[displayProgressBar]]">
-      <paper-progress indeterminate class="blue"></paper-progress>
-    </template>
+    <div class="progress-bar-container">
+      <template is="dom-if" if="[[displayProgressBar]]">
+        <paper-progress indeterminate class="blue"></paper-progress>
+      </template>
+    </div>
   </template>
 </dom-module>
 <script>
