@@ -518,7 +518,11 @@
         /**
          * Variable that controls the show of the progress bar
          */
-        displayProgressBar: Boolean
+        displayProgressBar: Boolean,
+        waitBeforeRequest: {
+          type: Number,
+          value: 0
+        }
       },
 
       observers: [
@@ -593,13 +597,9 @@
       /**
        * On text event handler
        */
-      _textObserver: function (text) {
-        var option = {
-          text: this.text,
-          value: this.value
-        };      
-
-        this._fireEvent(option, 'text-changed');
+       _textObserver: function (text) {
+         //Used to fire the request to get the source
+        this._debounce('_textObserver', this._fireEventTextChanged, this.waitBeforeRequest);
 
         if (text && text.trim()) {
           this._showClearButton();
@@ -607,6 +607,24 @@
           this._hideClearButton();
           this._clear();
         }
+      },
+
+      _debounce(jobName, callback, wait) {
+        this._debouncers = this._debouncers || {};
+        return this._debouncers[jobName] = Polymer.Debouncer.debounce(
+          this._debouncers[jobName], wait > 0 ? Polymer.Async.timeOut.after(wait) : Polymer.Async.microTask,
+          callback.bind(this));
+      },
+
+      /**
+       * Fire event text changed
+       */
+      _fireEventTextChanged: function() {
+        var option = {
+              text: this.text,
+              value: this.value
+            };  
+        this._fireEvent(option, 'text-changed');
       },
 
       /**
