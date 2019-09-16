@@ -522,6 +522,14 @@
         waitBeforeRequest: {
           type: Number,
           value: 0
+        },
+        /**
+         * Variable to control when to fire textObserver
+         * Usefull when selecting an option from the dropdown
+         */
+        fireTextObserver: {
+          type: Boolean,
+          value: true
         }
       },
 
@@ -599,7 +607,10 @@
        */
        _textObserver: function (text) {
          //Used to fire the request to get the source
-        this._debounce('_textObserver', this._fireEventTextChanged, this.waitBeforeRequest);
+         if (this.fireTextObserver) {
+          this.debounce('_textObserver', this._fireEventTextChanged, this.waitBeforeRequest);
+         }
+         this.fireTextObserver = true;
 
         if (text && text.trim()) {
           this._showClearButton();
@@ -607,13 +618,6 @@
           this._hideClearButton();
           this._clear();
         }
-      },
-
-      _debounce(jobName, callback, wait) {
-        this._debouncers = this._debouncers || {};
-        return this._debouncers[jobName] = Polymer.Debouncer.debounce(
-          this._debouncers[jobName], wait > 0 ? Polymer.Async.timeOut.after(wait) : Polymer.Async.microTask,
-          callback.bind(this));
       },
 
       /**
@@ -632,6 +636,8 @@
        */
       _onAutocompleteSelected: function (event) {
         var selection = event.detail;
+
+        this.fireTextObserver = false;
 
         this.value = selection.value;
         this.text = selection.text;

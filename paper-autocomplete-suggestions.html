@@ -629,14 +629,14 @@
       _selection: function (index) {
         var selectedOption = this._suggestions[index];
 
+        this._fireEvent(selectedOption, 'selected');
+
         this._input.value = selectedOption[this.textProperty];
         this.selectedOption = selectedOption;
 
         this._value = this.value;
         this._text = this.text;
-        this._emptyItems();
-
-        this._fireEvent(selectedOption, 'selected');
+        this._emptyItems();      
 
         this.hideSuggestions();
       },
