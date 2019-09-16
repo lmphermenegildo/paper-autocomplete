@@ -333,6 +333,11 @@
         },
 
         /**
+        * Url to request source, used to know if filtering results is necessary
+        */
+        url: String,
+
+        /**
          * `_suggestions` Array with the actual suggestions to display
          */
         _suggestions: {
@@ -902,30 +907,34 @@
        * @returns {Array} an array containing only those items in the data source that matches the filtering logic.
        */
       queryFn: function (datasource, query) {
-        var queryResult = [];
+        if (!this.url) {
+          var queryResult = [];
 
-        datasource.forEach(function (item) {
-          var objText, objValue;
+          datasource.forEach(function (item) {
+            var objText, objValue;
 
-          if (typeof item === 'object') {
-            objText = item[this.textProperty];
-            objValue = item[this.valueProperty];
-          } else {
-            objText = item.toString();
-            objValue = objText;
-          }
+            if (typeof item === 'object') {
+              objText = item[this.textProperty];
+              objValue = item[this.valueProperty];
+            } else {
+              objText = item.toString();
+              objValue = objText;
+            }
 
-          if (objText.toLowerCase().indexOf(query) === 0) {
-            // NOTE: the structure of the result object matches with the current template. For custom templates, you
-            // might need to return more data
-            var resultItem = {};
-            resultItem[this.textProperty] = objText;
-            resultItem[this.valueProperty] = objValue;
-            queryResult.push(resultItem);
-          }
-        }.bind(this));
+            if (objText.toLowerCase().indexOf(query) === 0) {
+              // NOTE: the structure of the result object matches with the current template. For custom templates, you
+              // might need to return more data
+              var resultItem = {};
+              resultItem[this.textProperty] = objText;
+              resultItem[this.valueProperty] = objValue;
+              queryResult.push(resultItem);
+            }
+          }.bind(this));
 
-        return queryResult;
+          return queryResult;
+        } else {
+          return datasource;
+        }
       }
 
       /**

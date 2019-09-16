@@ -233,6 +233,7 @@
                                     source="[[source]]"
                                     remote-source="[[remoteSource]]"
                                     query-fn="[[queryFn]]"
+                                    url=[[url]]
                                     event-namespace="[[eventNamespace]]"
                                     highlighted-suggestion="{{_highlightedSuggestion}}"
                                     is-open="{{_isSuggestionsOpened}}"
@@ -515,14 +516,20 @@
           type: Object,
           notify: true
         },
+
         /**
          * Variable that controls the show of the progress bar
          */
         displayProgressBar: Boolean,
+
+        /**
+         * Timer for debouce _textObserver
+         */
         waitBeforeRequest: {
           type: Number,
           value: 0
         },
+
         /**
          * Variable to control when to fire textObserver
          * Usefull when selecting an option from the dropdown
@@ -530,7 +537,12 @@
         fireTextObserver: {
           type: Boolean,
           value: true
-        }
+        },
+
+        /**
+        * Url to request source, used to know if filtering results is necessary
+        */
+        url: String
       },
 
       observers: [
